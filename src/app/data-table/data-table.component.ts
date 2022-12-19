@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 
 export interface Employee {
   Id: number;
@@ -16,7 +17,7 @@ export interface Employee {
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
 })
-export class DataTableComponent {
+export class DataTableComponent implements AfterViewInit {
   EmpData: Employee[] = [
     {
       Id: 1,
@@ -100,4 +101,13 @@ export class DataTableComponent {
     },
   ];
   displayedColumns: string[] = ['Id', 'FirstName', 'LastName', 'Email','Gender','JobTitle'];
+
+  @ViewChild('paginator') paginator!: MatPaginator;
+
+  dataSource!: MatTableDataSource<Employee>;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource(this.EmpData);
+    this.dataSource.paginator = this.paginator;
+  }
 }
